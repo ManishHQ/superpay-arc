@@ -70,7 +70,7 @@ CREATE TABLE transactions (
     
     -- Fee information
     gas_fee DECIMAL(20, 8),
-    gas_fee_currency VARCHAR(10) DEFAULT 'ETH',
+    gas_fee_currency VARCHAR(10) DEFAULT 'SOL',
     platform_fee DECIMAL(20, 8),
     platform_fee_currency VARCHAR(10) DEFAULT 'USDC',
     

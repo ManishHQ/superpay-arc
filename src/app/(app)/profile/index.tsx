@@ -749,112 +749,6 @@ export default function ProfileScreen() {
 							</LinearGradient>
 						</View>
 					</View>
-					{/* Activity Card - Left Side */}
-					<View className='flex-1 w-1/2 mb-6 lg:mb-0'>
-						<LinearGradient
-							colors={['#3D5AFE', '#00C896']}
-							start={{ x: 0, y: 0 }}
-							end={{ x: 1, y: 0 }}
-							style={{
-								padding: 20,
-								borderRadius: 16,
-								height: '100%',
-							}}
-							className='md:p-6'
-						>
-							<View className='flex-row items-center justify-between mb-6'>
-								<View>
-									<Text
-										style={{ color: 'rgba(255, 255, 255, 0.95)' }}
-										className='text-xl font-semibold'
-									>
-										Your Activity
-									</Text>
-									<Text
-										style={{ color: 'rgba(255, 255, 255, 0.8)' }}
-										className='text-sm'
-									>
-										This month's overview
-									</Text>
-								</View>
-								<TouchableOpacity
-									onPress={() => setPortfolioVisible(!portfolioVisible)}
-								>
-									<Ionicons
-										name={portfolioVisible ? 'eye' : 'eye-off'}
-										size={24}
-										color='white'
-									/>
-								</TouchableOpacity>
-							</View>
-
-							{/* Stats Grid */}
-							<View className='space-y-4'>
-								<View className='flex-row justify-between'>
-									<View
-										className='flex-1 p-3 mr-2 rounded-xl'
-										style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
-									>
-										<Text className='text-xl font-bold text-white'>
-											{userStats.totalTransactions}
-										</Text>
-										<Text
-											style={{ color: 'rgba(255, 255, 255, 0.9)' }}
-											className='text-sm'
-										>
-											Transactions
-										</Text>
-									</View>
-									<View
-										className='flex-1 p-3 ml-2 rounded-xl'
-										style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
-									>
-										<Text className='text-xl font-bold text-white'>
-											{userStats.activeGroups}
-										</Text>
-										<Text
-											style={{ color: 'rgba(255, 255, 255, 0.9)' }}
-											className='text-sm'
-										>
-											Active Groups
-										</Text>
-									</View>
-								</View>
-								<View className='flex-row justify-between'>
-									<View
-										className='flex-1 p-3 mr-2 rounded-xl'
-										style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
-									>
-										<Text className='text-xl font-bold text-white'>
-											{userStats.friendsConnected}
-										</Text>
-										<Text
-											style={{ color: 'rgba(255, 255, 255, 0.9)' }}
-											className='text-sm'
-										>
-											Friends
-										</Text>
-									</View>
-									<View
-										className='flex-1 p-3 ml-2 rounded-xl'
-										style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
-									>
-										<Text className='text-xl font-bold text-white'>
-											{portfolioVisible
-												? `$${userStats.portfolioValue.toLocaleString()}`
-												: '•••••'}
-										</Text>
-										<Text
-											style={{ color: 'rgba(255, 255, 255, 0.9)' }}
-											className='text-sm'
-										>
-											Portfolio Value
-										</Text>
-									</View>
-								</View>
-							</View>
-						</LinearGradient>
-					</View>
 				</View>
 
 				<View className='flex-col mb-6 lg:flex-row lg:gap-8 lg:items-start'>
@@ -1005,7 +899,7 @@ export default function ProfileScreen() {
 				{/* Logout Button */}
 				<View className='md:max-w-4xl md:mx-auto'>
 					<TouchableOpacity
-						className='flex-row items-center justify-center p-6 mb-24 shadow-lg bg-gradient-to-r from-red-500 to-red-600 rounded-2xl'
+						className='flex-row items-center justify-center p-6 mb-24 bg-red-500 shadow-lg bg-gradient-to-r from-red-500 to-red-600 rounded-2xl'
 						onPress={handleLogout}
 					>
 						<Ionicons name='log-out' size={24} color='white' />

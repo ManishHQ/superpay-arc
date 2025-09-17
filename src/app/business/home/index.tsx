@@ -336,7 +336,7 @@ export default function BusinessDashboard() {
 	// Get wallet balance data
 	const primaryWallet = wallets.userWallets?.[0];
 	const walletAddress = primaryWallet?.address || '';
-	const ethBalance = getBalance(walletAddress, 'eth');
+	const ethBalance = getBalance(walletAddress, 'SOL');
 	const usdcBalance = getBalance(walletAddress, 'usdc');
 
 	// Format balances for display

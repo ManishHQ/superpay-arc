@@ -32,7 +32,7 @@ import { PotsActivityService } from '@/services/potsActivityService';
 import { publicClient } from '@/lib/client';
 import { debounce } from 'lodash';
 
-type CurrencyType = 'USDC' | 'ETH';
+type CurrencyType = 'USDC' | 'SOL';
 
 interface SendModalProps {
 	visible: boolean;
@@ -99,7 +99,7 @@ export default function SendModal({
 	const { getActivePots } = useSavingsPotsStore();
 
 	// Get current balances
-	const ethBalance = walletAddress ? getBalance(walletAddress, 'eth') : null;
+	const ethBalance = walletAddress ? getBalance(walletAddress, 'SOL') : null;
 	const usdcBalance = walletAddress ? getBalance(walletAddress, 'usdc') : null;
 
 	// Category options
@@ -123,7 +123,7 @@ export default function SendModal({
 
 	// Get available balance for selected currency
 	const availableBalance =
-		selectedCurrency === 'ETH'
+		selectedCurrency === 'SOL'
 			? ethBalance?.formatted || '0.0000'
 			: usdcBalance?.formatted || '0.00';
 
@@ -235,7 +235,7 @@ export default function SendModal({
 			const recipientAddress = recipient.wallet_address as `0x${string}`;
 
 			let txResult;
-			if (selectedCurrency === 'ETH') {
+			if (selectedCurrency === 'SOL') {
 				txResult = await walletService.sendETH(recipientAddress, amount);
 			} else {
 				const usdcService = walletService.getUSDCService();
@@ -264,8 +264,8 @@ export default function SendModal({
 						category: selectedCategory,
 						gas_fee: txResult.gasUsed
 							? Number(txResult.gasUsed) * 0.000000001
-							: undefined, // Convert wei to ETH
-						gas_fee_currency: 'ETH',
+							: undefined, // Convert wei to SOL
+						gas_fee_currency: 'SOL',
 					});
 
 					console.log('Transaction created:', transaction.id);
@@ -559,9 +559,9 @@ export default function SendModal({
 										</TouchableOpacity>
 
 										<TouchableOpacity
-											onPress={() => setSelectedCurrency('ETH')}
+											onPress={() => setSelectedCurrency('SOL')}
 											className={`flex-1 p-4 rounded-xl border-2 ${
-												selectedCurrency === 'ETH'
+												selectedCurrency === 'SOL'
 													? 'border-purple-500 bg-purple-50'
 													: 'border-gray-200 bg-white'
 											}`}
@@ -569,7 +569,7 @@ export default function SendModal({
 											<View className='flex-row items-center'>
 												<View
 													className={`w-8 h-8 rounded-full mr-3 ${
-														selectedCurrency === 'ETH'
+														selectedCurrency === 'SOL'
 															? 'bg-purple-600'
 															: 'bg-gray-400'
 													} items-center justify-center`}
@@ -581,16 +581,16 @@ export default function SendModal({
 												<View className='flex-1'>
 													<Text
 														className={`font-semibold ${
-															selectedCurrency === 'ETH'
+															selectedCurrency === 'SOL'
 																? 'text-purple-900'
 																: 'text-gray-900'
 														}`}
 													>
-														ETH
+														SOL
 													</Text>
 													<Text
 														className={`text-sm ${
-															selectedCurrency === 'ETH'
+															selectedCurrency === 'SOL'
 																? 'text-purple-700'
 																: 'text-gray-500'
 														}`}

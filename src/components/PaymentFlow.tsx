@@ -12,7 +12,7 @@ interface PaymentFlowProps {
 		amount: number,
 		recipients: string[],
 		note: string,
-		currency: 'USDC' | 'ETH',
+		currency: 'USDC' | 'SOL',
 		category?: string,
 		potId?: string
 	) => void;
@@ -112,7 +112,7 @@ export const PaymentFlow: React.FC<PaymentFlowProps> = ({
 		amount: number,
 		recipients: string[],
 		note: string,
-		currency: 'USDC' | 'ETH',
+		currency: 'USDC' | 'SOL',
 		category?: string,
 		potId?: string
 	) => {

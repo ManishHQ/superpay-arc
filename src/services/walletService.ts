@@ -1,15 +1,14 @@
-import { USDCService } from './usdcService';
-import { RateLimitedRPCService } from './rpcService';
-import { publicClient, dynamicClient } from '@/lib/client';
+import { dynamicClient } from '@/lib/client';
 import { Wallet } from '@dynamic-labs/client';
+import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 
 export interface WalletBalances {
-	eth: {
-		raw: bigint;
+	SOL: {
+		raw: number;
 		formatted: string;
 	};
 	usdc: {
-		raw: bigint;
+		raw: number;
 		formatted: string;
 		decimals: number;
 	};
@@ -20,19 +19,21 @@ export interface WalletBalances {
 export interface TransactionResult {
 	hash: string;
 	status: 'pending' | 'confirmed' | 'failed';
-	blockNumber?: number;
-	gasUsed?: bigint;
+	slot?: number;
 }
 
 export class WalletService {
-	private publicClient = publicClient;
-	private usdcService: USDCService;
-	private rpcService: RateLimitedRPCService;
+	private connection: Connection | null = null;
 
 	constructor() {
-		this.publicClient = publicClient;
-		this.usdcService = new USDCService(this.publicClient);
-		this.rpcService = RateLimitedRPCService.getInstance(this.publicClient);
+		// Connection will be created when needed
+	}
+
+	private getConnection(): Connection {
+		if (!this.connection) {
+			this.connection = dynamicClient.solana.getConnection();
+		}
+		return this.connection;
 	}
 
 	/**
@@ -69,14 +70,14 @@ export class WalletService {
 	 */
 	async getAllBalances(address: `0x${string}`): Promise<WalletBalances> {
 		try {
-			// Fetch ETH and USDC balances in parallel
+			// Fetch SOL and USDC balances in parallel
 			const [ethBalance, usdcBalance] = await Promise.all([
 				this.getETHBalance(address),
 				this.usdcService.getBalance(address),
 			]);
 
 			return {
-				eth: ethBalance,
+				SOL: ethBalance,
 				usdc: usdcBalance,
 				address,
 				shortAddress: this.formatAddress(address),
@@ -88,41 +89,38 @@ export class WalletService {
 	}
 
 	/**
-	 * Get ETH balance for an address
+	 * Get SOL balance for an address
 	 */
-	private async getETHBalance(address: `0x${string}`): Promise<{
-		raw: bigint;
+	private async getSOLBalance(address: string): Promise<{
+		raw: number;
 		formatted: string;
 	}> {
 		try {
-			const balance = await this.rpcService.execute(
-				(client) => client.getBalance({ address }),
-				`ETH balance for ${address}`
-			);
-			const formatted = this.formatETHBalance(balance);
+			const connection = this.getConnection();
+			const publicKey = new PublicKey(address);
+			const balance = await connection.getBalance(publicKey);
 
 			return {
 				raw: balance,
-				formatted,
+				formatted: (balance / LAMPORTS_PER_SOL).toFixed(4),
 			};
 		} catch (error) {
-			console.error('Error fetching ETH balance:', error);
+			console.error('Error fetching SOL balance:', error);
 
 			// Return zero balance instead of throwing to prevent UI crashes
 			return {
-				raw: 0n,
+				raw: 0,
 				formatted: '0.0000',
 			};
 		}
 	}
 
 	/**
-	 * Send a transaction using Dynamic wallet
+	 * Send a transaction using Dynamic Solana wallet
 	 */
 	async sendTransaction(
-		to: `0x${string}`,
-		value: bigint,
-		data?: `0x${string}`
+		to: string,
+		value: number // lamports
 	): Promise<TransactionResult> {
 		try {
 			const primaryWallet = this.getPrimaryWallet();
@@ -130,65 +128,64 @@ export class WalletService {
 				throw new Error('No wallet connected');
 			}
 
-			// Create wallet client
-			const walletClient = await dynamicClient.viem.createWalletClient({
-				wallet: primaryWallet,
-			});
+			// Get Solana signer
+			const signer = dynamicClient.solana.getSigner();
+			const connection = this.getConnection();
+
+			// Create simple transfer transaction
+			const { Transaction, SystemProgram } = await import('@solana/web3.js');
+			const transaction = new Transaction().add(
+				SystemProgram.transfer({
+					fromPubkey: new PublicKey(primaryWallet.address),
+					toPubkey: new PublicKey(to),
+					lamports: value,
+				})
+			);
 
 			// Send transaction
-			const hash = await walletClient.sendTransaction({
-				to,
-				value,
-				data,
-			});
-
-			// Wait for transaction confirmation
-			const receipt = await this.publicClient.waitForTransactionReceipt({
-				hash,
-			});
+			const signature = await signer.sendTransaction(transaction, connection);
 
 			return {
-				hash,
-				status: receipt.status === 'success' ? 'confirmed' : 'failed',
-				blockNumber: Number(receipt.blockNumber),
-				gasUsed: receipt.gasUsed,
+				hash: signature,
+				status: 'pending',
 			};
 		} catch (error) {
-			console.error('Error sending transaction:', error);
+			console.error('Error sending Solana transaction:', error);
 			throw new Error(`Failed to send transaction: ${error}`);
 		}
 	}
 
 	/**
-	 * Send ETH to an address
+	 * Send SOL to an address
 	 */
-	async sendETH(to: `0x${string}`, amount: string): Promise<TransactionResult> {
-		const value = this.parseEther(amount);
-		return this.sendTransaction(to, value);
+	async sendSOL(to: string, amount: string): Promise<TransactionResult> {
+		const lamports = parseFloat(amount) * LAMPORTS_PER_SOL;
+		return this.sendTransaction(to, lamports);
 	}
 
 	/**
 	 * Get transaction status
 	 */
-	async getTransactionStatus(hash: `0x${string}`): Promise<{
+	async getTransactionStatus(signature: string): Promise<{
 		status: 'pending' | 'confirmed' | 'failed';
-		blockNumber?: number;
+		slot?: number;
 		confirmations: number;
 	}> {
 		try {
-			const receipt = await this.publicClient.getTransactionReceipt({ hash });
+			const connection = this.getConnection();
+			const status = await connection.getSignatureStatus(signature);
 
-			if (!receipt) {
+			if (!status.value) {
 				return { status: 'pending', confirmations: 0 };
 			}
 
-			const latestBlock = await this.publicClient.getBlockNumber();
-			const confirmations = Number(latestBlock - receipt.blockNumber);
+			const isConfirmed = status.value.confirmationStatus === 'confirmed' || status.value.confirmationStatus === 'finalized';
+			const isFailed = status.value.err !== null;
 
 			return {
-				status: receipt.status === 'success' ? 'confirmed' : 'failed',
-				blockNumber: Number(receipt.blockNumber),
-				confirmations,
+				status: isFailed ? 'failed' : isConfirmed ? 'confirmed' : 'pending',
+				slot: status.value.slot,
+				confirmations: status.value.confirmations || 0,
 			};
 		} catch (error) {
 			console.error('Error getting transaction status:', error);
@@ -197,22 +194,22 @@ export class WalletService {
 	}
 
 	/**
-	 * Parse ETH amount from string to bigint (wei)
+	 * Parse SOL amount from string to lamports
 	 */
-	private parseEther(amount: string): bigint {
-		const eth = parseFloat(amount);
-		if (isNaN(eth) || eth < 0) {
-			throw new Error('Invalid ETH amount');
+	private parseSOL(amount: string): number {
+		const SOL = parseFloat(amount);
+		if (isNaN(SOL) || SOL < 0) {
+			throw new Error('Invalid SOL amount');
 		}
-		return BigInt(Math.floor(eth * 1e18));
+		return Math.floor(SOL * LAMPORTS_PER_SOL);
 	}
 
 	/**
-	 * Format ETH balance from wei to ETH
+	 * Format SOL balance from lamports to SOL
 	 */
-	private formatETHBalance(balance: bigint): string {
-		const eth = Number(balance) / 1e18;
-		return eth.toFixed(4);
+	private formatSOLBalance(balance: number): string {
+		const SOL = balance / LAMPORTS_PER_SOL;
+		return SOL.toFixed(4);
 	}
 
 	/**
@@ -223,18 +220,19 @@ export class WalletService {
 		return `${address.slice(0, 6)}...${address.slice(-4)}`;
 	}
 
-	/**
-	 * Get USDC service instance for direct access
-	 */
-	getUSDCService(): USDCService {
-		return this.usdcService;
-	}
+	// TODO: Implement USDC service for Solana
+	// getUSDCService(): USDCService { ... }
 
 	/**
-	 * Validate if an address is valid
+	 * Validate if an address is a valid Solana address
 	 */
 	static isValidAddress(address: string): boolean {
-		return /^0x[a-fA-F0-9]{40}$/.test(address);
+		try {
+			new PublicKey(address);
+			return true;
+		} catch {
+			return false;
+		}
 	}
 
 	/**
@@ -242,12 +240,12 @@ export class WalletService {
 	 */
 	static getDefaultBalances(): {
 		usdcBalance: string;
-		ethBalance: string;
+		solBalance: string;
 		walletAddress: string;
 	} {
 		return {
 			usdcBalance: '0.00',
-			ethBalance: '0.0000',
+			solBalance: '0.0000',
 			walletAddress: 'Not connected',
 		};
 	}

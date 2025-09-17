@@ -1,10 +1,8 @@
 import 'fast-text-encoding';
 import { createClient } from '@dynamic-labs/client';
 import { ReactNativeExtension } from '@dynamic-labs/react-native-extension';
-import { ViemExtension } from '@dynamic-labs/viem-extension';
-import { ZeroDevExtension } from '@dynamic-labs/zerodev-extension';
+import { SolanaExtension } from '@dynamic-labs/solana-extension';
 import { WebExtension } from '@dynamic-labs/web-extension';
-import { seiTestnet } from 'viem/chains';
 
 const environmentId =
 	(process.env.EXPO_PUBLIC_ENVIRONMENT_ID as string) ||
@@ -20,22 +18,9 @@ export const dynamicClient = createClient({
 	appName: 'Superpay',
 })
 	.extend(ReactNativeExtension())
-	.extend(ViemExtension())
-	.extend(ZeroDevExtension())
+	.extend(SolanaExtension())
 	.extend(WebExtension());
 
-export const publicClient = dynamicClient.viem.createPublicClient({
-	chain: seiTestnet,
-});
+// Solana connection will be handled via dynamicClient.solana.getConnection()
 
-export const walletClient = async () => {
-	try {
-		return await dynamicClient.viem.createWalletClient({
-			wallet: dynamicClient.wallets.primary!,
-			chain: seiTestnet,
-		});
-	} catch (error) {
-		console.error('Error creating wallet client:', error);
-		return null;
-	}
-};
+// Solana signer will be handled via dynamicClient.solana.getSigner()

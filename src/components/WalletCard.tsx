@@ -61,7 +61,7 @@ export const WalletCard: React.FC<WalletCardProps> = ({
 								style={{ color: 'rgba(255, 255, 255, 0.8)' }}
 								className='ml-2 text-sm'
 							>
-								ETH
+								SOL
 							</Text>
 						</View>
 					)}

@@ -100,7 +100,7 @@ export default function HomeScreen() {
 	const { onAppForeground } = useBalanceInvalidation();
 
 	// Get current balances from store
-	const ethBalance = walletAddress ? getBalance(walletAddress, 'eth') : null;
+	const ethBalance = walletAddress ? getBalance(walletAddress, 'SOL') : null;
 	const usdcBalance = walletAddress ? getBalance(walletAddress, 'usdc') : null;
 
 	// Create wallet data object for compatibility with existing components
@@ -267,15 +267,16 @@ export default function HomeScreen() {
 
 		try {
 			// Get transactions from the last 7 days
-			const allTransactions = await TransactionService.getUserTransactions(1000); // Get enough transactions
-			
+			const allTransactions =
+				await TransactionService.getUserTransactions(1000); // Get enough transactions
+
 			// Calculate start of current week (7 days ago)
 			const oneWeekAgo = new Date();
 			oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 			oneWeekAgo.setHours(0, 0, 0, 0); // Start of day
 
 			// Filter transactions from this week
-			const thisWeekTransactions = allTransactions.filter(transaction => {
+			const thisWeekTransactions = allTransactions.filter((transaction) => {
 				const transactionDate = new Date(transaction.created_at);
 				return transactionDate >= oneWeekAgo;
 			});
@@ -285,9 +286,9 @@ export default function HomeScreen() {
 			let transactionCount = thisWeekTransactions.length;
 
 			// Calculate sent and received amounts
-			thisWeekTransactions.forEach(transaction => {
+			thisWeekTransactions.forEach((transaction) => {
 				const isSent = transaction.from_user?.wallet_address === walletAddress;
-				
+
 				if (isSent) {
 					sent += transaction.amount;
 				} else {
@@ -443,7 +444,7 @@ export default function HomeScreen() {
 		amount: number,
 		recipients: string[],
 		note: string,
-		currency: 'USDC' | 'ETH',
+		currency: 'USDC' | 'SOL',
 		category?: string,
 		potId?: string
 	) => {

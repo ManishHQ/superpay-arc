@@ -16,6 +16,8 @@ export class UserProfileService {
 			// Try with admin client first if available (bypasses RLS)
 			const client = supabaseAdmin || supabase;
 
+			console.log('Profile data being inserted:', JSON.stringify(profileData, null, 2));
+
 			const { data, error } = await client
 				.from('user_profiles')
 				.insert([profileData])
@@ -62,6 +64,35 @@ export class UserProfileService {
 			return data;
 		} catch (error) {
 			console.error('Error fetching profile:', error);
+			return null;
+		}
+	}
+
+	/**
+	 * Get user profile by email
+	 */
+	static async getProfileByEmail(
+		email: string
+	): Promise<UserProfile | null> {
+		try {
+			const { data, error } = await supabase
+				.from('user_profiles')
+				.select('*')
+				.eq('email', email)
+				.single();
+
+			if (error) {
+				if (error.code === 'PGRST116') {
+					// No rows returned, user doesn't exist
+					return null;
+				}
+				console.error('Error fetching profile by email:', error);
+				return null;
+			}
+
+			return data;
+		} catch (error) {
+			console.error('Error fetching profile by email:', error);
 			return null;
 		}
 	}

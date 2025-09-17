@@ -494,7 +494,7 @@ export default function ActivityScreen() {
 		return (
 			<TouchableOpacity
 				key={pot.id}
-				className='p-4 mb-3 transition-all bg-white border border-gray-200 shadow-sm rounded-xl hover:shadow-md hover:border-gray-300'
+				className='p-4 mb-3 bg-white border border-gray-200 shadow-sm rounded-xl'
 				onPress={() => {
 					setSelectedPot(pot);
 					setShowPotDetailModal(true);
@@ -543,7 +543,7 @@ export default function ActivityScreen() {
 						<View className='mb-2'>
 							<View className='h-2 overflow-hidden bg-gray-200 rounded-full'>
 								<View
-									className='h-full transition-all rounded-full'
+									className='h-full rounded-full'
 									style={{
 										backgroundColor: pot.color,
 										width: `${Math.min(progress, 100)}%`,
@@ -622,7 +622,7 @@ export default function ActivityScreen() {
 						</Text>
 					</View>
 					<TouchableOpacity
-						className='flex-row items-center px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 shadow-sm transition-colors'
+						className='flex-row items-center px-4 py-2.5 rounded-xl bg-blue-600 shadow-sm'
 						onPress={() => setShowCreateModal(true)}
 					>
 						<Ionicons name='add' size={18} color='white' />
@@ -692,12 +692,12 @@ export default function ActivityScreen() {
 						</View>
 						<TouchableOpacity
 							onPress={() => setGlobalAutoInvest(!globalAutoInvestEnabled)}
-							className={`w-12 h-6 rounded-full transition-colors ${
+							className={`w-12 h-6 rounded-full ${
 								globalAutoInvestEnabled ? 'bg-purple-500' : 'bg-gray-300'
 							}`}
 						>
 							<View
-								className={`w-5 h-5 mt-0.5 bg-white rounded-full shadow-sm transition-transform ${
+								className={`w-5 h-5 mt-0.5 bg-white rounded-full shadow-sm ${
 									globalAutoInvestEnabled ? 'ml-6' : 'ml-0.5'
 								}`}
 							/>
@@ -707,7 +707,7 @@ export default function ActivityScreen() {
 
 				{/* Search Bar */}
 				<View className='relative mb-4'>
-					<View className='flex-row items-center px-4 py-3 transition-colors bg-white border border-gray-300 rounded-xl focus-within:border-blue-500'>
+					<View className='flex-row items-center px-4 py-3 bg-white border border-gray-300 rounded-xl'>
 						<Ionicons name='search' size={20} color='#9CA3AF' />
 						<TextInput
 							placeholder='Search savings pots...'
@@ -734,10 +734,10 @@ export default function ActivityScreen() {
 					contentContainerStyle={{ paddingRight: 16 }}
 				>
 					<TouchableOpacity
-						className={`px-4 py-2 mr-2 rounded-full border transition-colors ${
+						className={`px-4 py-2 mr-2 rounded-full border ${
 							selectedCategory === null
 								? 'bg-blue-500 border-blue-500'
-								: 'bg-white border-gray-200 hover:border-gray-300'
+								: 'bg-white border-gray-200'
 						}`}
 						onPress={() => setSelectedCategory(null)}
 					>
@@ -752,10 +752,10 @@ export default function ActivityScreen() {
 					{categoryOptions.map((option) => (
 						<TouchableOpacity
 							key={option.value}
-							className={`px-4 py-2 mr-2 rounded-full border transition-colors ${
+							className={`px-4 py-2 mr-2 rounded-full border ${
 								selectedCategory === option.value
 									? 'bg-blue-500 border-blue-500'
-									: 'bg-white border-gray-200 hover:border-gray-300'
+									: 'bg-white border-gray-200'
 							}`}
 							onPress={() => setSelectedCategory(option.value)}
 						>
@@ -868,7 +868,7 @@ export default function ActivityScreen() {
 										</Text>
 										<TouchableOpacity
 											onPress={() => setShowCreateModal(false)}
-											className='p-2 rounded-full hover:bg-gray-100'
+											className='p-2 rounded-full'
 										>
 											<Ionicons name='close' size={24} color='#666' />
 										</TouchableOpacity>
@@ -878,7 +878,7 @@ export default function ActivityScreen() {
 									{potTemplates.map((template) => (
 										<TouchableOpacity
 											key={template.name}
-											className='flex-row items-center p-4 mb-3 transition-colors bg-white border border-gray-200 hover:bg-gray-50 rounded-xl'
+											className='flex-row items-center p-4 mb-3 bg-white border border-gray-200 rounded-xl'
 											onPress={() => handleCreateFromTemplate(template)}
 										>
 											<View
@@ -911,7 +911,7 @@ export default function ActivityScreen() {
 
 									{/* Create Custom Button */}
 									<TouchableOpacity
-										className='flex-row items-center p-4 mb-3 transition-colors border-2 border-blue-300 border-dashed bg-blue-50 hover:bg-blue-100 rounded-xl'
+										className='flex-row items-center p-4 mb-3 border-2 border-blue-300 border-dashed bg-blue-50 rounded-xl'
 										onPress={handleCreateCustom}
 									>
 										<View className='items-center justify-center w-12 h-12 mr-4 bg-blue-200 rounded-full'>
@@ -976,7 +976,7 @@ export default function ActivityScreen() {
 										</Text>
 										<TouchableOpacity
 											onPress={handleCloseCustomModal}
-											className='p-2 rounded-full hover:bg-gray-100'
+											className='p-2 rounded-full'
 										>
 											<Ionicons name='close' size={24} color='#666' />
 										</TouchableOpacity>
@@ -994,7 +994,7 @@ export default function ActivityScreen() {
 											{customPotSuggestions.map((suggestion) => (
 												<TouchableOpacity
 													key={suggestion.name}
-													className='p-3 mr-3 bg-white border border-gray-200 rounded-xl hover:bg-gray-50'
+													className='p-3 mr-3 bg-white border border-gray-200 rounded-xl'
 													onPress={() => handleCustomSuggestion(suggestion)}
 													style={{ width: 140 }}
 												>
@@ -1143,13 +1143,13 @@ export default function ActivityScreen() {
 													</Text>
 												</View>
 												<TouchableOpacity
-													className={`w-10 h-6 rounded-full transition-colors ${
+													className={`w-10 h-6 rounded-full ${
 														isStrictPot ? 'bg-red-500' : 'bg-gray-300'
 													}`}
 													onPress={() => setIsStrictPot(!isStrictPot)}
 												>
 													<View
-														className={`w-4 h-4 mt-1 bg-white rounded-full shadow-sm transition-transform ${
+														className={`w-4 h-4 mt-1 bg-white rounded-full shadow-sm ${
 															isStrictPot ? 'ml-5' : 'ml-1'
 														}`}
 													/>
@@ -1210,13 +1210,13 @@ export default function ActivityScreen() {
 													</Text>
 												</View>
 												<TouchableOpacity
-													className={`w-10 h-6 rounded-full transition-colors ${
+													className={`w-10 h-6 rounded-full ${
 														isJointPot ? 'bg-blue-500' : 'bg-gray-300'
 													}`}
 													onPress={() => setIsJointPot(!isJointPot)}
 												>
 													<View
-														className={`w-4 h-4 mt-1 bg-white rounded-full shadow-sm transition-transform ${
+														className={`w-4 h-4 mt-1 bg-white rounded-full shadow-sm ${
 															isJointPot ? 'ml-5' : 'ml-1'
 														}`}
 													/>
@@ -1353,11 +1353,11 @@ export default function ActivityScreen() {
 
 									{/* Create Button */}
 									<TouchableOpacity
-										className={`p-4 rounded-xl transition-colors ${
+										className={`p-4 rounded-xl ${
 											customPotName.trim() &&
 											customPotTarget &&
 											parseFloat(customPotTarget) > 0
-												? 'bg-blue-600 hover:bg-blue-700'
+												? 'bg-blue-600'
 												: 'bg-gray-300'
 										}`}
 										onPress={handleCreateCustomPot}
@@ -1419,7 +1419,7 @@ export default function ActivityScreen() {
 										</Text>
 										<TouchableOpacity
 											onPress={() => setShowPotDetailModal(false)}
-											className='p-2 rounded-full hover:bg-gray-100'
+											className='p-2 rounded-full'
 										>
 											<Ionicons name='close' size={24} color='#666' />
 										</TouchableOpacity>
@@ -1719,11 +1719,11 @@ export default function ActivityScreen() {
 
 									{/* Add Funds Button */}
 									<TouchableOpacity
-										className={`p-4 rounded-xl transition-colors ${
+										className={`p-4 rounded-xl ${
 											fundAmount &&
 											parseFloat(fundAmount) > 0 &&
 											parseFloat(fundAmount) <= availableBalance
-												? 'bg-blue-600 hover:bg-blue-700'
+												? 'bg-blue-600'
 												: 'bg-gray-300'
 										}`}
 										onPress={handleAddFunds}

@@ -43,8 +43,13 @@ export class AuthService {
 
       // Then try to find by email if available
       if (authUser.email) {
-        // Note: We don't have a direct email lookup method, but we can check by username or ID
-        // For now, we'll rely on wallet address as the primary identifier
+        console.log('Checking database for email:', authUser.email);
+        const profileByEmail = await UserProfileService.getProfileByEmail(authUser.email);
+        if (profileByEmail) {
+          console.log('Profile found by email:', profileByEmail);
+          return profileByEmail;
+        }
+        console.log('No profile found for email');
       }
 
       return null;

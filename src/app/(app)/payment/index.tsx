@@ -337,8 +337,8 @@ export default function PaymentScreen() {
 					network: 'base-sepolia',
 					gas_fee: txResult.gasUsed
 						? Number(txResult.gasUsed) * 0.000000001
-						: undefined, // Convert wei to ETH
-					gas_fee_currency: 'ETH',
+						: undefined, // Convert wei to SOL
+					gas_fee_currency: 'SOL',
 					platform_fee: numericAmount * 0.001, // 0.1% platform fee
 					platform_fee_currency: 'USDC',
 					transaction_type: 'transfer' as const,
@@ -961,7 +961,7 @@ export default function PaymentScreen() {
 										<View className='flex-row items-center justify-between mb-2'>
 											<Text className='text-sm text-gray-600'>Gas Fee:</Text>
 											<Text className='text-sm font-medium text-gray-900'>
-												${completedTransaction.gas_fee?.toFixed(4)} ETH
+												${completedTransaction.gas_fee?.toFixed(4)} SOL
 											</Text>
 										</View>
 
@@ -1021,7 +1021,7 @@ export default function PaymentScreen() {
 													{parseFloat(
 														completedTransaction.effectiveGasPrice
 													).toFixed(8)}{' '}
-													ETH/gas
+													SOL/gas
 												</Text>
 											</>
 										)}
