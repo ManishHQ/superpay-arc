@@ -1,13 +1,13 @@
 # SuperPay - Payments and Loyalties
 
-A modern, feature-rich financial management application built with React Native and Expo, featuring a comprehensive savings pots system powered by Supabase.
+A modern, feature-rich financial management application built with React Native and Expo, featuring a comprehensive savings pots system powered by Supabase and Solana blockchain.
 
 ## 🚀 Features
 
 ### 💰 **Core Financial Management**
 
 - **Savings Pots System** - Create, manage, and track multiple savings goals
-- **USDC Integration** - Native support for USDC cryptocurrency transactions
+- **Solana USDC Integration** - Native support for Solana USDC cryptocurrency transactions
 - **QR Code Payments** - Scan and generate QR codes for instant payments
 - **Real-time Balance Tracking** - Live updates of wallet balances and pot amounts
 
@@ -17,12 +17,12 @@ A modern, feature-rich financial management application built with React Native 
 - **Joint Pots** - Collaborative savings with friends and family
 - **Strict Savings** - Time-locked pots with withdrawal deadlines
 - **Auto-Invest** - Automated weekly/monthly contributions
-- **Yield Strategies** - DeFi protocol integration for earning interest
+- **Yield Strategies** - Solana DeFi protocol integration for earning interest
 - **Progress Tracking** - Visual progress bars and goal projections
 
 ### 🔐 **Security & Authentication**
 
-- **Wallet Integration** - Dynamic wallet connection support
+- **Solana Wallet Integration** - Phantom, Solflare, and other Solana wallet support
 - **User Profiles** - Comprehensive user management system
 - **Row Level Security** - Supabase-powered data protection
 - **Transaction History** - Complete audit trail of all financial activities
@@ -54,11 +54,11 @@ A modern, feature-rich financial management application built with React Native 
 
 ### **Blockchain & Payments**
 
-- **USDC** - Stablecoin for transactions
-- **Dynamic Wallets** - Multi-wallet support
-- **QR Code Generation** - Payment request system
-- **Transaction Monitoring** - Payment status tracking
-- **Smart Contracts** - Ethereum-based savings pots (available but not implemented)
+- **Solana USDC** - SPL token stablecoin for transactions
+- **Solana Wallets** - Phantom, Solflare, and multi-wallet support
+- **QR Code Generation** - Solana Pay QR code system
+- **Transaction Monitoring** - Real-time Solana transaction tracking
+- **Anchor Programs** - Solana-based savings pots programs
 
 ### **State Management**
 
@@ -87,10 +87,11 @@ react-native-expo/
 │   ├── hooks/                  # Custom React hooks
 │   ├── types/                  # TypeScript type definitions
 │   └── lib/                    # Configuration and utilities
-├── contracts/                  # Smart contracts (Ethereum)
-│   ├── SavingsPots.sol        # Main savings pots contract
-│   ├── mUSDC.sol              # Mock USDC token contract
-│   └── README.md              # Contract documentation
+├── anchor/                     # Solana programs (Anchor framework)
+│   ├── programs/               # Solana program source code
+│   ├── tests/                  # Anchor tests
+│   ├── target/                 # Build artifacts
+│   └── Anchor.toml             # Anchor configuration
 ├── supabase/                   # Database migrations and config
 ├── assets/                     # Images, icons, and static files
 └── docs/                       # Documentation and guides
@@ -161,27 +162,28 @@ react-native-expo/
 - **Audit Trails** - Complete transaction history
 - **Scalable Design** - Optimized for high user volumes
 
-## ⛓️ Smart Contracts
+## ⛓️ Solana Programs
 
-### **Available Contracts (Not Currently Implemented)**
+### **Solana Integration**
 
-The project includes smart contracts for future blockchain integration:
+The project integrates with Solana blockchain for enhanced financial operations:
 
-- **`SavingsPots.sol`** - Main contract for on-chain savings pots
-- **`mUSDC.sol`** - Mock USDC token for testing and development
+- **Anchor Programs** - Built using Anchor framework for savings pots
+- **SPL Token Integration** - Native Solana USDC token support
+- **Wallet Integration** - Phantom, Solflare, and other Solana wallets
 
-### **Contract Features**
+### **Program Features**
 
-- **Savings Pot Management** - Create, fund, and withdraw from blockchain-based pots
-- **USDC Integration** - Native stablecoin support for all transactions
+- **Savings Pot Management** - Create, fund, and withdraw from Solana-based pots
+- **USDC SPL Token** - Native Solana stablecoin support for all transactions
 - **Multi-User Support** - Collaborative savings with on-chain verification
-- **Yield Farming** - DeFi protocol integration for earning interest
+- **DeFi Integration** - Solana DeFi protocols for earning yield
 
 ### **Implementation Status**
 
-- **Current Version**: Supabase-only pots system (recommended for production)
-- **Future Version**: Optional blockchain integration for advanced users
-- **Migration Path**: Seamless upgrade from database to blockchain pots
+- **Current Version**: Hybrid system with Supabase + Solana integration
+- **Solana Features**: USDC payments, wallet connections, transaction tracking
+- **Future Enhancements**: Advanced Solana program features and DeFi integrations
 
 ## 🔧 Configuration
 
@@ -215,10 +217,10 @@ EXPO_PUBLIC_APP_VERSION=1.0.0
 
 ### **Payment System**
 
-- QR code generation and scanning
-- USDC transaction support
+- Solana Pay QR code generation and scanning
+- Solana USDC transaction support
 - Payment request system
-- Transaction monitoring
+- Real-time Solana transaction monitoring
 
 ### **Savings Pots**
 
@@ -320,10 +322,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### **Upcoming Features**
 
 - **Advanced Analytics** - Detailed financial insights
-- **Multi-Currency Support** - Beyond USDC
+- **Multi-Currency Support** - Additional Solana SPL tokens
 - **Social Features** - Share goals and achievements
 - **AI Recommendations** - Smart savings suggestions
-- **Mobile Banking** - Direct bank account integration
+- **Enhanced Solana Integration** - Advanced program features and DeFi protocols
 
 ### **Platform Expansion**
 
@@ -336,6 +338,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Expo Team** - Amazing development platform
 - **Supabase** - Powerful backend-as-a-service
+- **Solana Foundation** - Revolutionary blockchain technology
+- **Anchor Framework** - Powerful Solana development framework
 - **React Native Community** - Excellent ecosystem
 - **Open Source Contributors** - All the amazing libraries
 
